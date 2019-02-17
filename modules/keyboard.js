@@ -110,6 +110,9 @@ class Keyboard extends Module {
       if (evt.key === 'Backspace' && evt.which !== 229) {
         bindings = bindings.concat(this.bindings[evt.key] || []);
       }
+      if (evt.key === 'Enter' && evt.which !== 229) {
+        bindings = bindings.concat(this.bindings[evt.key] || []);
+      }
       // 修改中文输入法删除时的问题
       /*
       if (evt.which === 229) {
