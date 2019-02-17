@@ -99,20 +99,25 @@ class Keyboard extends Module {
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented) return;
+      /*
       const bindings = (this.bindings[evt.key] || []).concat(
         this.bindings[evt.which] || [],
       );
+      */
       // 修改中文输入法下按键被错误映射的问题
-      // const bindings = this.bindings[evt.which] || [];
+      let bindings = this.bindings[evt.which] || [];
       // 修改中文输入法删除时的问题
       if (evt.key === 'Backspace' && evt.which === 229) {
         // console.log(evt.key, evt.which);
         // console.log(bindings);
         bindings = [];
         // debugger;
+      } else {
+        // 删除 list 时需要以前的事件
+        bindings = bindings.concat(this.bindings[evt.key] || []);
       }
-      console.log(evt.key, evt.which);
-      console.log(bindings);
+      // console.log(evt.key, evt.which);
+      // console.log(bindings);
       // 修改中文输入法按下 . 和回车后换行的问题
       if (evt.key === 'Enter' && evt.which === 229) {
         bindings = [];
