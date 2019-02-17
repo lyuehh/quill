@@ -112,14 +112,16 @@ class Keyboard extends Module {
       );
       */
       // 修改中文输入法下按键被错误映射的问题
-      let bindings = this.bindings[evt.which || evt.keyCode] || [];
+      let bindings = [];
 
       if (evt.key === 'Backspace' && evt.which !== 229) {
-        bindings = bindings.concat(this.bindings[evt.key] || []);
+        bindings = this.bindings[evt.key] || [];
       }
       if (evt.key === 'Enter' && evt.which !== 229) {
-        bindings = bindings.concat(this.bindings[evt.key] || []);
+        bindings = this.bindings[evt.key] || [];
       }
+
+      bindings = bindings.concat(this.bindings[evt.which || evt.keyCode] || []);
       // 修改中文输入法删除时的问题
       /*
       if (evt.which === 229) {
