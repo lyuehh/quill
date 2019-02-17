@@ -99,13 +99,20 @@ class Keyboard extends Module {
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented) return;
+
+      /*
+      let which = evt.which || evt.keyCode;
+      let bindings = (this.bindings[which] || []).filter(function(binding) {
+        return Keyboard.match(evt, binding);
+      });
+      */
       /*
       const bindings = (this.bindings[evt.key] || []).concat(
         this.bindings[evt.which] || [],
       );
       */
       // 修改中文输入法下按键被错误映射的问题
-      let bindings = this.bindings[evt.which] || [];
+      let bindings = this.bindings[evt.which || evt.keyCode] || [];
 
       if (evt.key === 'Backspace' && evt.which !== 229) {
         bindings = bindings.concat(this.bindings[evt.key] || []);
