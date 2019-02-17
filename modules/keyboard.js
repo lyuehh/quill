@@ -99,10 +99,28 @@ class Keyboard extends Module {
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented) return;
-      const bindings = (this.bindings[evt.key] || []).concat(
-        this.bindings[evt.which] || [],
-      );
+      // const bindings = (this.bindings[evt.key] || []).concat(
+        // this.bindings[evt.which] || [],
+      // );
+      // 修改中文输入法下按键被错误映射的问题
+      const bindings = this.bindings[evt.which] || [];
+      // 修改中文输入法删除时的问题
+      /*
+      if (evt.key === 'Backspace' && evt.which === 229) {
+        // console.log(evt.key, evt.which);
+        // console.log(bindings);
+        bindings = [];
+        // debugger;
+      }
+      console.log(evt.key, evt.which);
+      console.log(bindings);
+      // 修改中文输入法按下 . 和回车后换行的问题
+      if (evt.key === 'Enter' && evt.which === 229) {
+        bindings = [];
+      }
+      */
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
+      // console.log('matches', matches);
       if (matches.length === 0) return;
       const range = this.quill.getSelection();
       if (range == null || !this.quill.hasFocus()) return;
@@ -118,6 +136,16 @@ class Keyboard extends Module {
           : '';
       const suffixText =
         leafEnd instanceof TextBlot ? leafEnd.value().slice(offsetEnd) : '';
+      /*
+      console.log('range', range);
+      console.log('line', line);
+      console.log('offset', offset);
+      console.log('leafStart', leafStart);
+      console.log('offsetStart', offsetStart);
+      console.log('leafEnd', offsetEnd);
+      console.log('prefixText', prefixText);
+      console.log('suffixText', suffixText);
+      */
       const curContext = {
         collapsed: range.length === 0,
         empty: range.length === 0 && line.length() <= 1,
@@ -128,6 +156,7 @@ class Keyboard extends Module {
         suffix: suffixText,
         event: evt,
       };
+      // console.log('curContext', curContext);
       const prevented = matches.some(binding => {
         if (
           binding.collapsed != null &&
@@ -168,6 +197,7 @@ class Keyboard extends Module {
         }
         return binding.handler.call(this, range, curContext, binding) !== true;
       });
+      // console.log('prevented', prevented);
       if (prevented) {
         evt.preventDefault();
       }

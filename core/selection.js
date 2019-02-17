@@ -71,20 +71,23 @@ class Selection {
       this.scroll.batchStart();
     });
     this.root.addEventListener('compositionend', () => {
-      this.scroll.batchEnd();
-      this.composing = false;
-      if (this.cursor.parent) {
-        const range = this.cursor.restore();
-        if (!range) return;
-        setTimeout(() => {
-          this.setNativeRange(
-            range.startNode,
-            range.startOffset,
-            range.endNode,
-            range.endOffset,
-          );
-        }, 1);
-      }
+      setTimeout(() => {
+        this.scroll.batchEnd();
+        this.composing = false;
+        if (this.cursor.parent) {
+          const range = this.cursor.restore();
+          console.log(range);
+          if (!range) return;
+          setTimeout(() => {
+            this.setNativeRange(
+              range.startNode,
+              range.startOffset,
+              range.endNode,
+              range.endOffset,
+            );
+          }, 1);
+        }
+      }, 0); // <- and this
     });
   }
 
