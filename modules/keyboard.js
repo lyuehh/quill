@@ -99,13 +99,12 @@ class Keyboard extends Module {
   listen() {
     this.quill.root.addEventListener('keydown', evt => {
       if (evt.defaultPrevented) return;
-      // const bindings = (this.bindings[evt.key] || []).concat(
-        // this.bindings[evt.which] || [],
-      // );
+      const bindings = (this.bindings[evt.key] || []).concat(
+        this.bindings[evt.which] || [],
+      );
       // 修改中文输入法下按键被错误映射的问题
-      const bindings = this.bindings[evt.which] || [];
+      // const bindings = this.bindings[evt.which] || [];
       // 修改中文输入法删除时的问题
-      /*
       if (evt.key === 'Backspace' && evt.which === 229) {
         // console.log(evt.key, evt.which);
         // console.log(bindings);
@@ -118,7 +117,6 @@ class Keyboard extends Module {
       if (evt.key === 'Enter' && evt.which === 229) {
         bindings = [];
       }
-      */
       const matches = bindings.filter(binding => Keyboard.match(evt, binding));
       // console.log('matches', matches);
       if (matches.length === 0) return;
